@@ -1,7 +1,7 @@
 use candid::encode_one;
 use clap::Args;
 use ic_agent::{ic_types::Principal, Agent, AgentError};
-use std::{fs::File, io::Read, time::Duration};
+use std::time::Duration;
 
 #[derive(Args)]
 pub struct WasmUpload {
@@ -34,9 +34,7 @@ impl WasmUpload {
     }
 
     pub async fn run(&self, agent: &Agent) {
-        let mut f = File::open(&self.path).unwrap();
-        let mut wasm: Vec<u8> = Vec::new();
-        f.read_to_end(&mut wasm).unwrap();
+        let wasm = std::fs::read(&self.path).unwrap();
 
         self.upload(agent, &wasm)
             .await
