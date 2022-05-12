@@ -1,26 +1,25 @@
 ## Infinityswap Dfinity Executor
 
-### Setup
-- clone the identity repo
-    ```
-    git clone https://github.com/infinity-swap/identity
-    ```
-- clone the repo
-- run below to compile this binary crate
-    ```
-    cargo build
-    ```
-- for a release build, run
-    ```
-    cargo build --release && cp target/release/ifx .
-    ```
+### Build
+```
+cargo build
+```
+
+For a release build, run
+
+```
+cargo build --release && cp target/release/ifx .
+```
 
 ### Usage
-- run below to view usage description for this cli
-    ```
-    ./ifx --help
-    ```
-- example cmd to upload wasm to token canister
-    ```
-    ./ifx wasm-upload --identity=<path to pem file> [--network=[local|ic|<url>]] wasm-upload --path=<path to wasm> <CANISTER_ID>
-    ```
+Run below to view usage description for this cli
+
+```sh
+./ifx --help
+```
+Example cmd to upload wasm to token canister
+```sh
+./ifx wasm-upload --identity=<path to pem file> [--network=[local|ic|<url>]] wasm-upload --path=<path to wasm> <CANISTER_ID>
+```
+
+Note that **--identity** option should point to *.pem to the active idendity in DFX configuration

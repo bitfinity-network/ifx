@@ -1,7 +1,7 @@
 use candid::encode_one;
 use clap::Args;
 use ic_agent::{ic_types::Principal, Agent, AgentError};
-use std::{time::Duration, fs};
+use std::{fs, time::Duration};
 
 #[derive(Args)]
 pub struct WasmUpload {

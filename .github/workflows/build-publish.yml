@@ -1,0 +1,72 @@
+name: "Build & Puplish"
+
+on:
+  workflow_dispatch:
+    # Just run it
+  push:
+    branches:    
+      - 'main'  
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: "Setup"
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          toolchain: stable
+          profile: minimal
+          components: rustfmt, clippy
+      
+  
+      - name: "Checking code format"
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all --check
+
+      - name: "Checking code style"
+        if: ${{ ! inputs.rs-skip-clippy }} 
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --all-features --all-targets
+
+      - name: "Building"
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+
+      - name: "Testing"
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+
+      - name: "Uploading artifact"
+        uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: error 
+          name: ifx-binary
+          path: target/release/ifx
+
+  publishing:
+    needs: [build-test]
+    uses: infinity-swap/.github/.github/workflows/publish-wrapped-artifact.yml@main
+    with:
+      input-artifact: ifx-binary
+      output-image-name: ifx-tool
+      # Condition to use latest tag
+      output-image-tag-latest: ${{ github.ref_type == 'branch' && github.ref == 'refs/heads/main' }}
+      # Condition to publish docker image
+      push-image: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+
+    secrets:
+      gh_token: ${{ secrets.GH_PKG_TOKEN }}
+      gh_login: ${{ secrets.GH_PKG_LOGIN }}
+
