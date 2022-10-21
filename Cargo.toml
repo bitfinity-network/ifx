@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 ic-agent = "0.14.0"
-clap = { version = "3.1.6", features = ["derive"] }
+clap = { version = "4.0.17", features = ["derive"] }
 candid = "0.7.12"
 garcon = "0.2.3"
 tokio = { version = "1.17.0", features = ["rt", "macros"] }
