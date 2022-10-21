@@ -6,7 +6,7 @@ use std::{fs, time::Duration};
 #[derive(Args)]
 pub struct WasmUpload {
     /// Path to the wasm you want to upload
-    #[clap(long, short)]
+    #[arg(long, short)]
     path: String,
 
     /// method name to call on the canister
@@ -14,7 +14,7 @@ pub struct WasmUpload {
     method_name: String,
 
     /// canister you want to upload the wasm to
-    #[clap(parse(try_from_str))]
+    #[arg(value_parser)]
     canister_id: Principal,
 }
 

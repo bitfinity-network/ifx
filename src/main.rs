@@ -2,24 +2,34 @@ mod agent;
 mod wasm_upload;
 
 use crate::agent::create_agent;
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, ValueEnum};
 use wasm_upload::WasmUpload;
 
 /// InfinitySwap DFINITY Executor
 #[derive(Parser)]
-#[clap(author, version, about, long_about = None)]
-#[clap(propagate_version = true)]
+#[command(author, version, about, long_about = None)]
+#[command(propagate_version = true)]
 struct Cli {
-    #[clap(subcommand)]
+    #[command(subcommand)]
     command: Commands,
 
     /// compute network to connect to
-    #[clap(short, long, default_value_t = String::from("local"))]
+    #[arg(short, long, default_value_t = String::from("local"))]
     network: String,
 
     /// Path to an identity pem file
-    #[clap(short, long, default_value_t = String::from("identity.pem"))]
+    #[arg(short, long, default_value_t = String::from("identity.pem"))]
     identity: String,
+
+    /// Identity type
+    #[arg(short = 't', long, value_enum, default_value_t = IdentityType::ED25519)]
+    idtype: IdentityType,
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
+pub enum IdentityType {
+    ED25519,
+    SECP256K1,
 }
 
 #[derive(Subcommand)]
@@ -32,7 +42,9 @@ enum Commands {
 async fn main() {
     let cli = Cli::parse();
 
-    let agent = create_agent(&cli.identity, &cli.network).await.unwrap();
+    let agent = create_agent(&cli.idtype, &cli.identity, &cli.network)
+        .await
+        .unwrap();
 
     match &cli.command {
         Commands::WasmUpload(wasm_upload) => {
