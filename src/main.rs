@@ -21,7 +21,7 @@ struct Cli {
     #[arg(short, long, default_value_t = String::from("identity.pem"))]
     identity: String,
 
-    /// Path to an identity pem file
+    /// Identity type
     #[arg(short = 't', long, value_enum, default_value_t = IdentityType::ED25519)]
     idtype: IdentityType,
 }
