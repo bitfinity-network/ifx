@@ -1,7 +1,8 @@
 use crate::IdentityType;
 use ic_agent::{
-    agent::http_transport::ReqwestHttpReplicaV2Transport, identity::{BasicIdentity, Secp256k1Identity}, Agent,
-    AgentError,
+    agent::http_transport::ReqwestHttpReplicaV2Transport,
+    identity::{BasicIdentity, Secp256k1Identity},
+    Agent, AgentError,
 };
 
 pub async fn create_agent(
@@ -9,9 +10,13 @@ pub async fn create_agent(
     pem_path: &str,
     network: &str,
 ) -> Result<Agent, AgentError> {
-    let agent =  match id_type {
-        IdentityType::ED25519 => Agent::builder().with_identity(BasicIdentity::from_pem_file(pem_path).unwrap()),
-        IdentityType::SECP256K1 => Agent::builder().with_identity(Secp256k1Identity::from_pem_file(pem_path).unwrap())
+    let agent = match id_type {
+        IdentityType::ED25519 => {
+            Agent::builder().with_identity(BasicIdentity::from_pem_file(pem_path).unwrap())
+        }
+        IdentityType::SECP256K1 => {
+            Agent::builder().with_identity(Secp256k1Identity::from_pem_file(pem_path).unwrap())
+        }
     };
 
     match network {
