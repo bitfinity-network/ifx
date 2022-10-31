@@ -11,3 +11,5 @@ clap = { version = "4.0.17", features = ["derive"] }
 candid = "0.7.12"
 garcon = "0.2.3"
 tokio = { version = "1.17.0", features = ["rt", "macros"] }
+ledger-canister = { git = "https://github.com/dfinity/ic", rev = "d2564f5a929915b1f3588887d8b10004500f2ee2" }
+ic-base-types = { git = "https://github.com/dfinity/ic", rev = "d2564f5a929915b1f3588887d8b10004500f2ee2" }
