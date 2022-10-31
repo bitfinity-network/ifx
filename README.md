@@ -8,7 +8,7 @@ cargo build
 For a release build, run
 
 ```
-cargo build --release && cp target/release/ifx .
+cargo build --release && cp target/release/ifx 
 ```
 
 ### Usage
