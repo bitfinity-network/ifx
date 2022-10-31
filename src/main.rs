@@ -1,7 +1,9 @@
+mod account_id;
 mod agent;
 mod wasm_upload;
 
 use crate::agent::create_agent;
+use account_id::AccountId;
 use clap::{Parser, Subcommand, ValueEnum};
 use wasm_upload::WasmUpload;
 
@@ -36,19 +38,24 @@ pub enum IdentityType {
 enum Commands {
     /// Upload wasm to a canister
     WasmUpload(WasmUpload),
+
+    /// Generate account identifier
+    AccountId(AccountId),
 }
 
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
 
-    let agent = create_agent(&cli.idtype, &cli.identity, &cli.network)
-        .await
-        .unwrap();
-
     match &cli.command {
         Commands::WasmUpload(wasm_upload) => {
+            let agent = create_agent(&cli.idtype, &cli.identity, &cli.network)
+                .await
+                .unwrap();
             wasm_upload.run(&agent).await;
+        }
+        Commands::AccountId(account_id) => {
+            account_id.run();
         }
     }
 }
