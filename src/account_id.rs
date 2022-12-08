@@ -5,8 +5,8 @@ use ledger_canister::{AccountIdentifier, Subaccount};
 #[derive(Args)]
 pub struct AccountId {
     /// generate subaccount from principal
-    #[arg(value_parser)]
-    subaccount_from: PrincipalId,
+    #[arg(long, short)]
+    subaccount_from: Option<PrincipalId>,
 
     /// principal to generate account-id from
     #[arg(value_parser)]
@@ -15,8 +15,8 @@ pub struct AccountId {
 
 impl AccountId {
     pub fn run(&self) {
-        let subaccount = Subaccount::from(&self.subaccount_from);
-        let account_id = AccountIdentifier::new(self.principal_id, Some(subaccount));
+        let subaccount = self.subaccount_from.map(|p| Subaccount::from(&p));
+        let account_id = AccountIdentifier::new(self.principal_id, subaccount);
         println!("{}", account_id.to_hex())
     }
 }
